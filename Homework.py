@@ -10,6 +10,18 @@ class Student:
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
 
+    def rate_lection(self, lecturer, course, grade):
+        if isinstance(lecturer, Lecturer) and course in self.courses_in_progress and course in lecturer.courses_attached:
+            if course in lecturer.lectionsgrades:
+                lecturer.lectionsgrades[course] += [grade]
+            else:
+                lecturer.lectionsgrades[course] = [grade]
+        else:
+            return 'Ошибка'
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {(dict.values(self.grades))/len(self.grades)}\nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}'
+        return res
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -17,6 +29,19 @@ class Mentor:
         self.surname = surname
         self.courses_attached = []
 
+
+class Lecturer(Mentor):
+    def __init__(self, name, surname):
+        super().__init__(name, surname)
+        self.lectionsgrades = {}
+
+    def __str__(self):
+        res = f'Имя: (self.name)\nФамилия: (self.surname)\nСредняя оценка за лекции: ((self.lectionsgrades.values())/len(self.lectionsgrades))'
+        return res
+
+
+
+class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
             if course in student.grades:
@@ -26,22 +51,14 @@ class Mentor:
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        res = f'Имя: (self.name)\nФамилия: (self.surname)'
+        return res
 
-class Lecturer(Mentor):
-    pass
-
-class Reviewer(Mentor):
-    pass
-
-
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
-
-cool_mentor = Mentor('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
-
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-
-print(best_student.grades)
+worst_student = Student('Bill', 'Klinton', 'Male')
+best_lecturer = Lecturer('Chaos', 'Knight')
+best_lecturer.courses_attached += ['Git']
+worst_student.courses_in_progress += ['Git']
+worst_student.rate_lection(best_lecturer, 'Git', 9)
+print(best_lecturer.lectionsgrades)
+print(worst_student)
