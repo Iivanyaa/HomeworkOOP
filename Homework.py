@@ -14,7 +14,7 @@ class Student:
         if ((isinstance(lecturer, Lecturer) and
              course in self.courses_in_progress and
              course in lecturer.courses_attached)):
-            if course in lecturer.lectionsgrades:
+            if course in lecturer.lectionsgrades.keys():
                 lecturer.lectionsgrades[course] += [grade]
             else:
                 lecturer.lectionsgrades[course] = [grade]
@@ -35,8 +35,9 @@ class Lecturer(Mentor):
         self.lectionsgrades = {}
 
     def __str__(self):
-        res = (f'Имя: (self.name)\nФамилия: (self.surname)\nСредняя оценка за лекции:'
-               f'((self.lectionsgrades.values())/len(self.lectionsgrades))')
+        x = self.lectionsgrades
+        print(x)
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции:{(sum(x))/(len(x))}'
         return res
 
 
@@ -51,7 +52,7 @@ class Reviewer(Mentor):
             return 'Ошибка'
 
     def __str__(self):
-        res = f'Имя: (self.name)\nФамилия: (self.surname)'
+        res = f'Имя: {self.name}\nФамилия: {self.surname}'
         return res
 
 
@@ -60,4 +61,10 @@ best_lecturer = Lecturer('Chaos', 'Knight')
 best_lecturer.courses_attached += ['Git']
 worst_student.courses_in_progress += ['Git']
 worst_student.rate_lection(best_lecturer, 'Git', 9)
-print(best_lecturer)
+worst_student.rate_lection(best_lecturer, 'Git', 3)
+worst_student.rate_lection(best_lecturer, 'Git', 4)
+best_lecturer.courses_attached += ['OOP']
+worst_student.courses_in_progress += ['OOP']
+print(best_lecturer.courses_attached)
+print(best_lecturer.lectionsgrades)
+worst_student.rate_lection(best_lecturer, 'OOP', 9)
